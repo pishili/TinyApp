@@ -12,7 +12,13 @@ const PORT = 8080;
 // the callback recieves request and response arguments.
 // we read values from the request, and send a string back
 // to the client using the response object
+
+// Routing: a web server handling requests and sending responses back to client
 const requestHandler = function(request, response) {
+  
+  console.log('In requestHandler');// NEW LINE
+  respond.end(`Requested Path: ${request.url}\nRequest Method: ${request.method}`);
+
   if (request.url == "/") {
     response.end("Welcome!");
   } else if (request.url == "/urls") {
