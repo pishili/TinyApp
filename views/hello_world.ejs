@@ -1,0 +1,20 @@
+<!-- this is hello_world.js file , 
+we can display the hello world string stored in templates
+templateVars object by calling the key greeting-->
+
+<!-- This would display the string "hello world-->
+
+<h1><%= greeting %></h1>
+
+<!--If you want to run some code without it displaying on the page
+we can use the slightly different syntax of <% %>
+if you only wanna show greeting if it has a value-->
+
+
+<!-- This line will not show up on the page -->
+<% if (greeting) {%>
+    <!-- This line will only show if greeting is truthy -->
+    <h1><%= greeting %></h1>
+<% }%>    
+    
+
