@@ -582,7 +582,39 @@ This activity demonstrates a common way for computers to communicate with each o
 - Update your express server so that when it receives a POST request to __/urls__, it responds with a
 - redirection to /urls/:shortURL
 - Where shortURL is the random string we generated. 
+
+
+
+- send a more meaningful response back to the client (browser)
+- Instead of just saying OK, Let's tell the browser to go to a new page.
+- Respond with a redirect. Redirect the user to a new page that shows them the new link they created. 
 - 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

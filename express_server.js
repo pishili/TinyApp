@@ -1,9 +1,10 @@
 // Implementation of a basic web server
 // using the Express.jsframework.
-const { generate } = require('./functions');
+
 const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
+const { generate } = require('./functions');
 
 // the body-parser convert the request body
 // from a buffer into string that we can read.  
@@ -32,8 +33,8 @@ app.get("/urls/new", (req, res) => {
   });
 
 app.get("/urls/:shortURL", (req, res) => {
-    let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
-    res.render("urls_show", templateVars);
+  let longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL)
   });
 
 app.get("/urls", (req, res) => {
@@ -75,12 +76,25 @@ app.get("/", (req, res) => {
 
 // POST
 app.post("/urls", (req, res) => {
-    console.log(req.body);  // Log the POST request body to the console
+  console.log('Entering post urls');
+    // console.log(req.body);  // Log the POST request body to the console
     const randomString = generate();
     //Update your express server so that the shortURL-longURL key-value pair
     // are saved to the urlDatabase when it receives a POST request to /urls
-    let templateVars = { shortURL: randomString, longURL: urlDatabase[randomString] };
-    res.send(templateVars);         // Respond with 'Ok (we will replace this)
+    // let templateVars = { shortURL: randomString, longURL: urlDatabase[randomString] };
+    let shortURL = randomString;
+    let longURL = req.body.longURL;
+    urlDatabase[shortURL] = longURL;
+    // console.log(shortURL);
+    // console.log(longURL);
+  // res.redirect(`./urls/:${longURL}`)
+    // let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+    // var redirectTo = JSON.stringify(templateVars.longURL);
+    // res.redirect(redirectTo);
+    // console.log(redirectTo);
+    // // res.send(templateVars[longURL]);         // Respond with 'Ok (we will replace this)
+    let templateVars = { urls: urlDatabase };
+    res.render("urls_index", templateVars);
     // res.render("urls_show", templateVars);
 })
 
