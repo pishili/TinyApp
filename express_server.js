@@ -145,6 +145,16 @@ app.post('/urls/:shortURL', (req, res) => {
 // Login
 app.post('/login', (req, res) => {
   // console.log(req.body.username);
+  // step 1: get the username
+  const username = req.body.username;
+  // step 2: create a cookie object to put username inside
+  const cookie = res.cookie('name', username);
+  // set cookie name to value
+  // console.log(cookieObj);
+  // print the cookie after creating
+  console.log('cookie exists', cookie);
+  // step 3:redirect the browser back to the ./url
+  res.redirect('./url');
 });
 
 // Edit
