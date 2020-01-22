@@ -54,12 +54,12 @@ app.get("/urls", (req, res) => {
     res.render("urls_index", templateVars);
   });
   
-  app.get("/urls/:id", (req, res) => {
-    // how this route handler will look like
-    let templateVars = {} 
-    // let templateVars = { urls: urlDatabase };
-    res.render("urls_index", templateVars);
-  }); 
+app.get("/urls/:id", (req, res) => {
+  // how this route handler will look like
+  let templateVars = {} 
+  // let templateVars = { urls: urlDatabase };
+  res.render("urls_index", templateVars);
+}); 
 
 app.get("/set", (req, res) => {
     const a = 1;
@@ -91,7 +91,7 @@ app.get("/", (req, res) => {
 });
 
 // adding get operation for cookie
-app.get('/cookie', function (req, res) {
+app.get('/cookie', (req, res) => {
   // Cookies that have not been signed
   console.log('Cookies: ', req.cookies)
 
@@ -127,7 +127,7 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 app.post('/urls/:id', (req, res) => {
   // console.log(req.body);
   // urlDatabase[req.params.id] = res.params;
-  res.redirect('/url');  
+  res.redirect('/url/');  
 })
 
 
