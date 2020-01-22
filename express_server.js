@@ -14,6 +14,9 @@ const { generate } = require('./functions');
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
+// adding the cookie-parser
+var cookieParser = require('cookie-parser')
+app.use(cookieParser());
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -38,12 +41,25 @@ app.get("/urls/:shortURL", (req, res) => {
   res.redirect(longURL)
   });
 
+
+
+app.get("/urls/:id", (req, res) => {
+  let longURL = urlDatabase[req.params.id];
+  res.render("urls_show");
+  });
+  
 app.get("/urls", (req, res) => {
     // how this route handler will look like
     let templateVars = { urls: urlDatabase };
     res.render("urls_index", templateVars);
   });
   
+  app.get("/urls/:id", (req, res) => {
+    // how this route handler will look like
+    let templateVars = {} 
+    // let templateVars = { urls: urlDatabase };
+    res.render("urls_index", templateVars);
+  }); 
 
 app.get("/set", (req, res) => {
     const a = 1;
@@ -74,6 +90,18 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+// adding get operation for cookie
+app.get('/cookie', function (req, res) {
+  // Cookies that have not been signed
+  console.log('Cookies: ', req.cookies)
+
+  // Cookies that have been signed
+  console.log('Signed Cookies: ', req.signedCookies)
+
+  // after 
+
+})
+
 
 // POST
 app.post("/urls", (req, res) => {
@@ -95,9 +123,11 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 })
 
 // Edit
+
 app.post('/urls/:id', (req, res) => {
-  urlDatabase[req.params.shortURL] = res.params;
-  res.redirect("/urls");  
+  // console.log(req.body);
+  // urlDatabase[req.params.id] = res.params;
+  res.redirect('/url');  
 })
 
 
