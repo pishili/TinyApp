@@ -12,6 +12,7 @@ const { generate } = require('./functions');
 // under the key body
 
 const bodyParser = require("body-parser");
+console.log(bodyParser);
 app.use(bodyParser.urlencoded({extended: true}));
 
 // adding the cookie-parser
@@ -36,11 +37,11 @@ app.get("/urls/new", (req, res) => {
     res.render("urls_new");
   });
 
+
 app.get("/urls/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL)
   });
-
 
 
 app.get("/urls/:id", (req, res) => {
@@ -50,7 +51,7 @@ app.get("/urls/:id", (req, res) => {
   
 app.get("/urls", (req, res) => {
     // how this route handler will look like
-    let templateVars = { urls: urlDatabase };
+    let templateVars = { urls: urlDatabase, x: 'yay' };
     res.render("urls_index", templateVars);
   });
   
@@ -102,6 +103,12 @@ app.get('/cookie', (req, res) => {
 
 })
 
+app.get('/u/:shortURL', (req, res) => {
+  const shortURL = req.params.shortURL;
+  const longURL = urlDatabase[shortURL];
+  res.redirect(longURL);
+})
+
 
 // POST
 app.post("/urls", (req, res) => {
@@ -123,11 +130,28 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 })
 
 // Edit
+app.post('/urls/:shortURL', (req, res) => {
+  const shortURL = req.params.shortURL;
+  // let templateVars = {
+  //   'shortURL': shortURL,
+  //   'longURL': urlDatabase[shortURL],
+  // };
+  // res.render("urls_show", templateVars);
 
-app.post('/urls/:id', (req, res) => {
-  // console.log(req.body);
-  // urlDatabase[req.params.id] = res.params;
-  res.redirect('/url/');  
+  urlDatabase[shortURL] = req.body.longURL
+  res.redirect('/urls');
+})
+
+
+// Edit
+
+app.get('/urls/:shortURL/edit', (req, res) => {
+  const shortURL = req.params.shortURL;
+  let templateVars = {
+    'shortURL': shortURL,
+    'longURL': urlDatabase[shortURL],
+  };
+  res.render("urls_show", templateVars);
 })
 
 
