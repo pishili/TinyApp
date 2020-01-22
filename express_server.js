@@ -14,6 +14,7 @@ const { generate } = require('./functions');
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
+
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
@@ -77,26 +78,28 @@ app.get("/", (req, res) => {
 // POST
 app.post("/urls", (req, res) => {
   console.log('Entering post urls');
-    // console.log(req.body);  // Log the POST request body to the console
     const randomString = generate();
-    //Update your express server so that the shortURL-longURL key-value pair
-    // are saved to the urlDatabase when it receives a POST request to /urls
-    // let templateVars = { shortURL: randomString, longURL: urlDatabase[randomString] };
     let shortURL = randomString;
     let longURL = req.body.longURL;
     urlDatabase[shortURL] = longURL;
-    // console.log(shortURL);
-    // console.log(longURL);
-  // res.redirect(`./urls/:${longURL}`)
-    // let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
-    // var redirectTo = JSON.stringify(templateVars.longURL);
-    // res.redirect(redirectTo);
-    // console.log(redirectTo);
-    // // res.send(templateVars[longURL]);         // Respond with 'Ok (we will replace this)
     let templateVars = { urls: urlDatabase };
     res.render("urls_index", templateVars);
-    // res.render("urls_show", templateVars);
 })
+
+// Delete
+app.post('/urls/:shortURL/delete', (req, res) => {
+  console.log(urlDatabase)
+  delete urlDatabase[req.params.shortURL];
+  console.log(req.params.shortURL);
+  res.redirect("/urls");
+})
+
+// Edit
+app.post('/urls/:id', (req, res) => {
+  urlDatabase[req.params.shortURL] = res.params;
+  res.redirect("/urls");  
+})
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
