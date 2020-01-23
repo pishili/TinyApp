@@ -162,7 +162,8 @@ app.get('/login', (req, res) => {
   const temptVars = {
     "user": user
   }
-  res.render("urls_new", temptVars);
+  // res.render("urls_new", temptVars);
+  res.render("login", temptVars);
 
 });
 
@@ -235,8 +236,10 @@ app.get('/urls/:shortURL/edit', (req, res) => {
 // Login
 app.post('/login', (req, res) => {
   // how this route handler will look like
+
   let templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
+  
 });
 
 // My version of Register for Post Method
