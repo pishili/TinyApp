@@ -1,5 +1,7 @@
 // Implementation of a basic web server
 // using the Express.jsframework.
+// command + k + 0 -> folding
+// command + 
 
 const express = require("express");
 const app = express();
@@ -47,7 +49,7 @@ const users = {
   }
 }
 
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodParser.urlencoded({ extended: true }));
 
 // Sets
 
@@ -83,8 +85,7 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show");
 });
 
-app.get("/urls", (req, res) => {
-  // how this route handler will look like
+app.get("/urls", (req, res) => {  // how this route handler will look like
   const user_id = req.cookies.user_id;
   const user = users[user_id];
   if (user) {
@@ -206,8 +207,8 @@ app.post('/urls/:shortURL', (req, res) => {
   //   'longURL': urlDatabase[shortURL],
   // };
   // res.render("urls_show", templateVars);
-
-  urlDatabase[shortURL] = req.body.longURL
+  // urlDatabase[shortURL] && urlDatabase[shortURL].longURL
+  urlDatabase[shortURL].longURL = req.body.longURL
   res.redirect('/urls');
 })
 
@@ -251,7 +252,8 @@ app.get('/urls/:shortURL/edit', (req, res) => {
   const shortURL = req.params.shortURL;
   let templateVars = {
     'shortURL': shortURL,
-    'longURL': urlDatabase[shortURL],
+    // asking the existence of shortURL &&
+    'longURL': urlDatabase[shortURL] && urlDatabase[shortURL].longURL,
     'user': user
   };
   res.render("urls_show", templateVars);
@@ -302,7 +304,6 @@ app.post('/register', (req, res) => {
     res.redirect('/urls');
   }
 })
-
 
 
 app.listen(PORT, () => {
