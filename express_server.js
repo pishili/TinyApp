@@ -231,7 +231,8 @@ app.post('/login', (req, res) => {
 
   // bcrypt.compareSync(password, hashedRecordedPassword); // compare the entered password with hashed
   
-  // const user_id = checkEmailAndPasswordInUsers(users, email, password);
+  const user_id = checkEmailAndPasswordInUsers(users, email, password);
+  
   console.log(checkEmailAndPasswordInUsers(users, email, password));
   // console.log('user_id is ', user_id);
 
@@ -269,8 +270,10 @@ app.post('/logout', (req, res) => {
 // Edit
 
 app.get('/urls/:shortURL/edit', (req, res) => {
-  const user_is = req.cookies.user_id;
-  const user = users[user_is];
+  // replace with the new syntax
+  const user_id = req.cookies.user_id;
+  // const user_id = req.session.user_id;
+  const user = users[user_id];
   const shortURL = req.params.shortURL;
   let templateVars = {
     'shortURL': shortURL,
