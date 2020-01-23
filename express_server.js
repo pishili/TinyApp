@@ -25,8 +25,8 @@ var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "aJ48lW" },
+  "9sm5xK": { longURL: "http://www.google.com", userID: "aJ48lW" }
 };
 
 const users = {
@@ -178,9 +178,10 @@ app.post("/urls", (req, res) => {
   console.log('Entering post urls');
   const randomString = generate();
   let shortURL = randomString;
-  let longURL = req.body.longURL;
-  urlDatabase[shortURL] = longURL;
-  let templateVars = { urls: urlDatabase, "user": users[req.cookies.user_id] };
+  urlDatabase[shortURL] = {longURL: req.body.longURL, userID: req.cookies.user_id };
+  let user = users[req.cookies.user_id];
+  let templateVars = { urls: urlDatabase, "user": user};
+  console.log(urlDatabase);
   res.render("urls_index", templateVars);
 })
 

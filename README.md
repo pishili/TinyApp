@@ -783,7 +783,15 @@ const users = {
 
   
 
+URLS belong to users:
 
+
+
+[1] Which URL belong to particular users.
+
+[2] associate each new URL with the user that created it
+
+[3] 
 
 
 

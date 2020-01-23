@@ -32,7 +32,7 @@
 
         <tr>
           <td><%= shortUrl %></td>
-          <td><%= urls[shortUrl] %></td>
+          <td><%= urls[shortUrl].longURL %></td>
           <td>
             <form method="POST" action="/urls/<%- shortUrl %>/delete">
               <button type="submit">Delete</button>
