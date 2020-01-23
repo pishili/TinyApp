@@ -39,8 +39,6 @@ function checkEmailAndPasswordInUsers(users, email, password) {
     return undefined;
 }
 
-
-
 console.log(generate())
 
 

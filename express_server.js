@@ -9,6 +9,7 @@ const PORT = 8080; // default port 8080
 const { generate } = require('./functions');
 const { checkEmailAndPasswordInUsers } = require('./functions');
 const { checkEmailInUsers } = require('./functions');
+const bcrypt = require('bcrypt');
 
 // app.use(morgan('dev'));
 // app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // adding the cookie-parser
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
+
 
 const urlDatabase = {
   "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "aJ48lW" },
@@ -163,11 +165,14 @@ app.get('/u/:shortURL', (req, res) => {
 app.get('/register', (req, res) => {
   const user_id = req.cookies.user_id;
   const user = users[user_id];
+  const password = req.params.password;
+  console.log(password);
+  // const hashPassword = bcrypt.hashSync(password, 10);
+  // console.log(hashPassword);
   const temptVars = {
     "user": user
   }
   res.render("register", temptVars);
-
 });
 
 // Login
@@ -179,7 +184,6 @@ app.get('/login', (req, res) => {
   }
   // res.render("urls_new", temptVars);
   res.render("login", temptVars);
-
 });
 
 // POST
@@ -217,20 +221,37 @@ app.post('/urls/:shortURL', (req, res) => {
 app.post('/login', (req, res) => {
 
   const email = req.body.email;
+  //ladanks@gmail.com
   const password = req.body.password;
-  console.log(email);
-  console.log(password);
+  console.log('entered password when user log in: ', password);
 
-  const user_id = checkEmailAndPasswordInUsers(users, email, password)
-  console.log(user_id)
+  // const hashedRecordedPassword = users[randomId].password;
+  // console.log('randomID is: ', randomId);
+  // console.log('users object is', users[randomId]);
+
+  // bcrypt.compareSync(password, hashedRecordedPassword); // compare the entered password with hashed
+  
+  // const user_id = checkEmailAndPasswordInUsers(users, email, password);
+  console.log(checkEmailAndPasswordInUsers(users, email, password));
+  // console.log('user_id is ', user_id);
+
+  // const registeredHashedPasswrod = users[user_id].password;
+  // console.log('hashed pass is  ', registeredHashedPasswrod);
+  // console.log('registered hashed password: ', registeredHashedPasswrod);
+
+  // const passportCondition = bcrypt.compareSync(enteredPassword, registeredHashedPasswrod);
+  // if (passportCondition) {
+  //   return 'yay';
+  // }
+  // sample1@yahoo.com
+
+  // console.log(user_id)
   if (user_id) {
     res.cookie('user_id', user_id);
     res.redirect('/urls');
   } else {
     res.redirect('/login');
   }
-
-  
 });
 
 // Logout
@@ -278,11 +299,13 @@ app.get('/urls/:shortURL/edit', (req, res) => {
 app.post('/register', (req, res) => {
   // add a new user object to the global users object
   const randomID = generate();
-  // console.log(randomID);
   const email = req.body.email;
-  // console.log(email);
+  // console.log('email is', email);
   const password = req.body.password;
-  // console.log(password);
+  const hashPassword =  bcrypt.hashSync(password, 10);
+  // the password is hashed now. 
+  // console.log(hashPassword);
+
 
   if (email === '' || password === '') {
     res.status(400).send('The email or password is empty string');
@@ -293,9 +316,9 @@ app.post('/register', (req, res) => {
     users[randomID] = {
       "id": randomID,
       "email": email,
-      "password": password
+      "password": hashPassword
     }
-    // add cookie
+    // add cookie using user-id
     res.cookie('user_id', randomID);
     console.log(users);
 
