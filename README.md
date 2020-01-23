@@ -781,7 +781,7 @@ const users = {
 
   [1] This endpoint should add a new user object to the global users object
 
-  [2]
+  
 
 
 

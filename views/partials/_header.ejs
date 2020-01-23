@@ -13,10 +13,10 @@
 
      
 
-      <% if (username) { %> 
+      <% if (user) { %> 
         
         <form action="/logout" method="POST">
-          Username is: <%= username %>
+          Username is: <%= user.email %>
           <button type="submit" class="btn btn-primary">Logout</button> 
         </form>  
           
