@@ -5,7 +5,6 @@ const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
 const { generate } = require('./functions');
-const bcrypt = require('bcryptjs');
 
 
 // the body-parser convert the request body
