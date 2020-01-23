@@ -29,7 +29,6 @@ function checkEmailInUsers(users, email, passwrord) {
     return false;
 }
 
-
 function checkEmailAndPasswordInUsers(users, email, password) {
     for (let userID in users) {
         if (users[userID].email === email && users[userID].password === password) {
@@ -39,8 +38,17 @@ function checkEmailAndPasswordInUsers(users, email, password) {
     return undefined;
 }
 
-console.log(generate())
+function getUserByEmail(email, database) {
+    // lookup magic...
+    for (let user of database) {
+        if (user[id].email ==== email ) {
+            return user;
+        }
+    }
+  };
 
 
-
-module.exports = { generate, checkEmailAndPasswordInUsers, checkEmailInUsers };
+module.exports = { generate,
+                   checkEmailAndPasswordInUsers,
+                   checkEmailInUsers,
+                   getUserByEmail };
