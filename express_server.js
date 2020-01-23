@@ -87,13 +87,21 @@ app.get("/urls", (req, res) => {
   // how this route handler will look like
   const user_id = req.cookies.user_id;
   const user = users[user_id];
-  console.log(user_id);
-  console.log(user);
-  console.log(users)
+  if (user) {
+    // let filteredURLs = urlDatabase
+    // .filter((key, value) => value.userID === user_id)
+    let filteredURLs = {};
+    for (let shortUrl in urlDatabase) {
+      if (urlDatabase[shortUrl].userID === user_id) {
+        filteredURLs[shortUrl] = urlDatabase[shortUrl];
+      }
+    }
 
-
-  let templateVars = { urls: urlDatabase, user: user };
-  res.render("urls_index", templateVars);
+    let templateVars = { urls: filteredURLs, user: user };
+    res.render("urls_index", templateVars);
+  } else {
+    res.redirect('/login');
+  }
 });
 
 app.get("/urls/:id", (req, res) => {
@@ -179,10 +187,7 @@ app.post("/urls", (req, res) => {
   const randomString = generate();
   let shortURL = randomString;
   urlDatabase[shortURL] = {longURL: req.body.longURL, userID: req.cookies.user_id };
-  let user = users[req.cookies.user_id];
-  let templateVars = { urls: urlDatabase, "user": user};
-  console.log(urlDatabase);
-  res.render("urls_index", templateVars);
+  res.redirect('/urls')
 })
 
 // Delete
