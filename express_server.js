@@ -35,7 +35,17 @@ app.set("view engine", "ejs");
 // Gets
 
 app.get("/urls/new", (req, res) => {
-    res.render("urls_new");
+  const username = req.cookies.username;
+  if (username) {
+    const tempVars = {
+      "username": req.cookies.username
+    };
+    
+    res.render("urls_new", tempVars);
+  } else {
+    res.redirect('/login');
+  }
+  
   });
 
 
@@ -110,6 +120,27 @@ app.get('/u/:shortURL', (req, res) => {
   res.redirect(longURL);
 })
 
+// Register
+app.get('/register', (req, res) => {
+  const username = req.cookies.username;
+  const temptVars = {
+    "username": username
+  }
+  res.render("register", temptVars);
+  
+});
+
+// Login
+app.get('/login', (req, res) => {
+  const username = req.cookies.username;
+  const email = req.cookies.email;
+  const temptVars = {
+    "username": username,
+    "email": email
+  }
+  res.render("urls_new", temptVars);
+  
+});
 
 // POST
 app.post("/urls", (req, res) => {
@@ -118,7 +149,7 @@ app.post("/urls", (req, res) => {
     let shortURL = randomString;
     let longURL = req.body.longURL;
     urlDatabase[shortURL] = longURL;
-    let templateVars = { urls: urlDatabase };
+    let templateVars = { urls: urlDatabase , "username": req.cookies.username};
     res.render("urls_index", templateVars);
 })
 
@@ -177,8 +208,22 @@ app.get('/urls/:shortURL/edit', (req, res) => {
 // Login
 app.post('/login', (req, res) => {
   // how this route handler will look like
-  // let templateVars = { urls: urlDatabase, x: 'yay' };
-  // res.render("urls_index", templateVars);
+  let templateVars = { urls: urlDatabase};
+  res.render("urls_index", templateVars);
+});
+
+// Register
+app.post('/register', (req, res) => {
+  const username = req.body.username;
+  const email = req.body.email;
+
+  const temptVars = {
+    "username": username,
+    "email": email
+  }
+  // res.render("urls_new", temptVars);
+  res.redirect('/urls');
+  
 });
 
 
