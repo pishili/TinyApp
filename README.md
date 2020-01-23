@@ -625,9 +625,163 @@ app.set
 
 
 
+```javascript
+const express require('express');
+const app = express();
+
+const porr = (process.env.PORT || 8000;
+
+app.listen(port)
+
+
+```
+
+enviromental variables: inserted in runtime
+
+```zsh
+npm init
+npm i express
+touch .gitignore
+```
+
+```javascript
+// request
+// response
+// 
+app.get('/', (req, res) => {
+  res.send('hello world');
+});
+
+app.set('view engine', 'ejs');
+
+const breadsAndSoups = {
+  'abc': {
+    style: 'sourdough',
+    description: 'Andy\'s last fave'
+  },
+  'ghi': {
+    style: 'phocaccio',
+    description
+  }
+}
+
+// Browse
+app.get('/', (req, res) => {
+  const templateVars = {
+    breadsAndSoups
+  }
+})
+```
 
 
 
+- npm i ejs
+
+
+
+## Create a registraction page
+
+[1] Create a new template that includes a form with an __email address__ and __password field__.
+
+[2] The email field should use __type=email__ and have __name=email__.
+
+[3] The password field should use __type=password__ and __name=password__
+
+[4] The form should POST to /register
+
+[5] In express_server.js create a GET / register endpoint which returns the template you just created. 
+
+```html
+<!DOCTYLE html>
+main style="margin: 1em;">
+      <h3>Registration Page</h3>
+      <form class="form" action="/register" method="POST">
+        <div class="form-group mb-2">
+          <input class="form-control" type="email" name="email" placeholder="email" style="width: 300px; margin: 1em">
+          <input class="form-control" type="password" name="password" placeholder="password" style="width: 300px; margin: 1em">
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </main>
+```
+
+```javascript
+// Register
+// for get methods we can use shortURLs '/register:shortURL'
+// or we can use cookies
+app.get('/register', (req, res) => {
+  const username = req.cookies.username;
+  const temptVars = {
+    "username": username
+  }
+  res.render("register", temptVars)
+})
+
+// 
+
+// Register
+// Post methods 
+// for post methods you can see req.body.username or any other data
+app.post('/register', (req, res) => {
+  const username = req.body.username;
+  const email = req.body.email;
+  
+  const temptVars = {
+    "username": username,
+    "email": email
+  }
+  res.redirect('/login');
+})
+```
+
+### Create a Users Object
+
+In order to store our users, we will need a "data store" similar to the one we use to store URLs.
+
+[1] Create a global object called __users__ which will be used to store and access the users in the app.
+
+[2] The data should be saved to look like this:
+
+```javascript
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+  "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+}
+```
+
+#### Create a Registration Handler
+
+- Let's create the __endpoint__ that __handles the registration from data__.
+
+  ```javascript
+  // create endpoint
+  // handles registration from data
+  // it means post method for register
+  app.post('/register', (req, res) => {
+    const username = req.body.username;
+    const email = req.body.email;
+    
+    const temptVars = {
+      "username": username,
+      "email": email
+    }
+    res.redirect('/login');
+  })
+  ```
+
+  
+
+  [1] This endpoint should add a new user object to the global users object
+
+  [2]
 
 
 

@@ -6,6 +6,8 @@ const app = express();
 const PORT = 8080; // default port 8080
 const { generate } = require('./functions');
 
+// app.use(morgan('dev'));
+// app.use(bodyParser.urlencoded({ extended: false }));
 
 // the body-parser convert the request body
 // from a buffer into string that we can read.  
@@ -24,6 +26,19 @@ const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "user@example.com", 
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID", 
+    email: "user2@example.com", 
+    password: "dishwasher-funk"
+  }
+}
 
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -212,19 +227,52 @@ app.post('/login', (req, res) => {
   res.render("urls_index", templateVars);
 });
 
-// Register
-app.post('/register', (req, res) => {
-  const username = req.body.username;
-  const email = req.body.email;
+// My version of Register for Post Method
+// app.post('/register', (req, res) => {
+//   const username = req.body.username;
+//   const email = req.body.email;
 
-  const temptVars = {
-    "username": username,
-    "email": email
-  }
-  // res.render("urls_new", temptVars);
-  res.redirect('/login');
+//   const temptVars = {
+//     "username": username,
+//     "email": email
+//   }
+//   // res.render("urls_new", temptVars);
+//   res.redirect('/login');
   
-});
+// });
+
+// The requested version of Register for Post Method
+app.post('/register', (req, res) => {
+    // add a new user object to the global users object
+    const randomID = generate();
+    // console.log(randomID);
+    const email = req.body.email;
+    // console.log(email);
+    const password = req.body.password;
+    // console.log(password);
+    
+    // add new user
+    users[randomID] = {
+      "id": randomID,
+      "email": email,
+      "password": password
+    }
+
+    // add cookie
+    res.cookie('user_id', randomID);
+    console.log(users);
+
+    const templateVars = {
+      "username": req.body.username
+    }
+
+    if (!email) {
+      res.redirect('/register');
+    } else {
+      res.redirect('/urls');
+    }
+
+  });
 
 
 app.listen(PORT, () => {
