@@ -51,7 +51,7 @@ app.get("/urls/:id", (req, res) => {
   
 app.get("/urls", (req, res) => {
     // how this route handler will look like
-    let templateVars = { urls: urlDatabase, x: 'yay' };
+    let templateVars = { urls: urlDatabase, username: req.cookies.username};
     res.render("urls_index", templateVars);
   });
   
@@ -144,18 +144,23 @@ app.post('/urls/:shortURL', (req, res) => {
 
 // Login
 app.post('/login', (req, res) => {
-  // console.log(req.body.username);
-  // step 1: get the username
+  console.log('The login username is', req.cookies.username);
   const username = req.body.username;
-  // step 2: create a cookie object to put username inside
-  const cookie = res.cookie('name', username);
-  // set cookie name to value
-  // console.log(cookieObj);
-  // print the cookie after creating
-  console.log('cookie exists', cookie);
-  // step 3:redirect the browser back to the ./url
-  res.redirect('./url');
+  res.cookie('username', username);
+  res.redirect('/urls');
 });
+
+// Logout
+app.post('/logout', (req, res) => {
+  // clear the username cookie
+  console.log('The logout username is', req.cookies.username);
+  // res.cookie('username', null);
+  res.clearCookie('username');
+
+  console.log('The logout username should be null ', req.cookies.username);
+  // redirect the user back to the /urls page
+  res.redirect('/urls');
+})
 
 // Edit
 
