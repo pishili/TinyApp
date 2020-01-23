@@ -5,6 +5,7 @@ const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
 const { generate } = require('./functions');
+const { checkEmailInUsers } = require('./functions');
 
 // app.use(morgan('dev'));
 // app.use(bodyParser.urlencoded({ extended: false }));
@@ -266,13 +267,17 @@ app.post('/register', (req, res) => {
       "username": req.body.username
     }
 
-    if (!email) {
-      res.redirect('/register');
-    } else {
-      res.redirect('/urls');
-    }
+    console.log(users[randomID].email);
+    console.log(users[randomID].password);
+    console.log(checkEmailInUsers(users, email));
 
-  });
+    if (users[randomID].email === '' || users[randomID].password === '') {
+      res.status(400).send('The email or password is empty string');
+    } else if (checkEmailInUsers(users, email)) {
+      res.status(400).send('You are already registered');
+    }
+    res.redirect('/urls');
+  })
 
 
 app.listen(PORT, () => {

@@ -20,8 +20,19 @@ function generate() {
     return generate_random_string(6) + generate_random_number()
 }
 
+
+
+function checkEmailInUsers(users, email) {
+    for (let userID in users) {
+        if (users[userID].email === email) {
+            return true;
+        }
+    }
+    return false;
+}
+
 console.log(generate())
 
 
 
-module.exports = { generate };
+module.exports = { generate, checkEmailInUsers };
