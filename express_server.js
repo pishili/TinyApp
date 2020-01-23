@@ -5,6 +5,8 @@ const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
 const { generate } = require('./functions');
+const bcrypt = require('bcryptjs');
+
 
 // the body-parser convert the request body
 // from a buffer into string that we can read.  
@@ -16,7 +18,7 @@ console.log(bodyParser);
 app.use(bodyParser.urlencoded({extended: true}));
 
 // adding the cookie-parser
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 const urlDatabase = {
@@ -39,7 +41,7 @@ app.get("/urls/new", (req, res) => {
 
 
 app.get("/urls/:shortURL", (req, res) => {
-  let longURL = urlDatabase[req.params.shortURL];
+  let longURL = urlDatabase[req.params.shortUrl];
   res.redirect(longURL)
   });
 
@@ -51,7 +53,11 @@ app.get("/urls/:id", (req, res) => {
   
 app.get("/urls", (req, res) => {
     // how this route handler will look like
+<<<<<<< HEAD
     let templateVars = { urls: urlDatabase, username: req.cookies.username};
+=======
+    let templateVars = { urls: urlDatabase, x: 'yay' };
+>>>>>>> master
     res.render("urls_index", templateVars);
   });
   
@@ -109,6 +115,22 @@ app.get('/u/:shortURL', (req, res) => {
   res.redirect(longURL);
 })
 
+<<<<<<< HEAD
+=======
+app.get('/login/', (req, res) => {
+  console.log(req.body);
+})
+
+// Edit
+app.get('/urls/:shortURL/edit', (req, res) => {
+  const shortURL = req.params.shortURL;
+  let templateVars = {
+    'shortURL': shortURL,
+    'longURL': urlDatabase[shortURL],
+  };
+  res.render("urls_show", templateVars);
+})
+>>>>>>> master
 
 // POST
 app.post("/urls", (req, res) => {
@@ -132,6 +154,7 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 // Edit
 app.post('/urls/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
+<<<<<<< HEAD
   // let templateVars = {
   //   'shortURL': shortURL,
   //   'longURL': urlDatabase[shortURL],
@@ -171,7 +194,18 @@ app.get('/urls/:shortURL/edit', (req, res) => {
     'longURL': urlDatabase[shortURL],
   };
   res.render("urls_show", templateVars);
+=======
+  urlDatabase[shortURL] = req.body.longURL
+  res.redirect('/urls');
+>>>>>>> master
 })
+
+// Login
+app.post('/login', (req, res) => {
+  // how this route handler will look like
+  // let templateVars = { urls: urlDatabase, x: 'yay' };
+  // res.render("urls_index", templateVars);
+});
 
 
 app.listen(PORT, () => {

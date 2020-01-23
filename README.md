@@ -552,7 +552,7 @@ We used the Express `render` method to respond to requests by sending back a tem
     - Store these urls in a real database.
     - The form has one named input, with the name attribute set to longURL.
 
-
+![image-20200121192329136](/Users/ladan/Library/Application Support/typora-user-images/image-20200121192329136.png)
 
 
 
@@ -588,21 +588,40 @@ This activity demonstrates a common way for computers to communicate with each o
 - send a more meaningful response back to the client (browser)
 - Instead of just saying OK, Let's tell the browser to go to a new page.
 - Respond with a redirect. Redirect the user to a new page that shows them the new link they created. 
-- 
+- https://learngitbranching.js.org
+
+
+
+![image-20200121193417625](/Users/ladan/Library/Application Support/typora-user-images/image-20200121193417625.png)
+
+![image-20200121193608004](/Users/ladan/Library/Application Support/typora-user-images/image-20200121193608004.png)
 
 
 
 
 
+![image-20200121193732176](/Users/ladan/Library/Application Support/typora-user-images/image-20200121193732176.png)
 
 
 
+```javascript
+const express = require("express");
+const app = express();
+const PORT = 8080;
+const { generate } = require('./functions');
 
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({extended: true}));
 
+const urlDatabase = {
+  "b2xVn2": "http://www.lighthouselabs.ca",
+  "9sm5xK": "http://www.google.com"
+};
 
+app.use(bodyParser.urlencoded({extended: true}));
 
-
-
+app.set
+```
 
 
 
