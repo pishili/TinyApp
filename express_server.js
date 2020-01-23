@@ -5,6 +5,7 @@ const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
 const { generate } = require('./functions');
+const { checkEmailAndPasswordInUsers } = require('./functions');
 const { checkEmailInUsers } = require('./functions');
 
 // app.use(morgan('dev'));
@@ -38,6 +39,11 @@ const users = {
     id: "user2RandomID",
     email: "user2@example.com",
     password: "dishwasher-funk"
+  },
+  "user3RandomID": {
+    id: "user3RandomID",
+    email: "ladanks@gmail.com",
+    password: "1234"
   }
 }
 
@@ -201,10 +207,22 @@ app.post('/urls/:shortURL', (req, res) => {
 
 // Login
 app.post('/login', (req, res) => {
-  console.log('The login username is', req.cookies.username);
-  const username = req.body.username;
-  res.cookie('username', username);
-  res.redirect('/urls');
+
+  const email = req.body.email;
+  const password = req.body.password;
+  console.log(email);
+  console.log(password);
+
+  const user_id = checkEmailAndPasswordInUsers(users, email, password)
+  console.log(user_id)
+  if (user_id) {
+    res.cookie('user_id', user_id);
+    res.redirect('/urls');
+  } else {
+    res.redirect('/login');
+  }
+
+  
 });
 
 // Logout
@@ -212,11 +230,11 @@ app.post('/logout', (req, res) => {
   // clear the username cookie
   console.log('The logout username is', req.cookies.username);
   // res.cookie('username', null);
-  res.clearCookie('username');
+  res.clearCookie('user_id');
 
   console.log('The logout username should be null ', req.cookies.username);
   // redirect the user back to the /urls page
-  res.redirect('/urls');
+  res.redirect('/login');
 })
 
 // Edit
@@ -232,15 +250,6 @@ app.get('/urls/:shortURL/edit', (req, res) => {
   };
   res.render("urls_show", templateVars);
 })
-
-// Login
-app.post('/login', (req, res) => {
-  // how this route handler will look like
-
-  let templateVars = { urls: urlDatabase };
-  res.render("urls_index", templateVars);
-  
-});
 
 // My version of Register for Post Method
 // app.post('/register', (req, res) => {

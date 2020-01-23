@@ -20,9 +20,7 @@ function generate() {
     return generate_random_string(6) + generate_random_number()
 }
 
-
-
-function checkEmailInUsers(users, email) {
+function checkEmailInUsers(users, email, passwrord) {
     for (let userID in users) {
         if (users[userID].email === email) {
             return true;
@@ -31,8 +29,19 @@ function checkEmailInUsers(users, email) {
     return false;
 }
 
+
+function checkEmailAndPasswordInUsers(users, email, password) {
+    for (let userID in users) {
+        if (users[userID].email === email && users[userID].password === password) {
+            return userID;
+        }
+    }
+    return undefined;
+}
+
+
 console.log(generate())
 
 
 
-module.exports = { generate, checkEmailInUsers };
+module.exports = { generate, checkEmailAndPasswordInUsers, checkEmailInUsers };
