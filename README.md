@@ -1,12 +1,30 @@
-## TinyApp Project
+# TinyApp Project
 
-TinyApp is a web application to provide people with the ability of registering on the app and building  set of URLs that they want to get Short URLs for. The application objective is simillar to bit.ly for generating short urls for the associated longs urls. 
+TinyApp is a full stack web application built with Node and Express that allows users to shorten long URLs (e.g. bit.ly).
 
-#### Integrated technologies
+## Final Product
 
-[1] JavaScript, Node and Express
+[1] The user can login, verify her email using header. Add, edit or delete the long urls imorted for outputting short urls.
 
-[2] HTML and CSS
+![image-20200123223537933](/Users/ladan/Library/Application Support/typora-user-images/image-20200123223537933.png)
+
+[2] The Edit funtionality allow the user to modify their inserted long urls.
+
+![image-20200123223711648](/Users/ladan/Library/Application Support/typora-user-images/image-20200123223711648.png)
+
+## Dependencies
+
+- Node.js
+- Express
+- EJS
+- bcrypt
+- body-parser
+- cookie-session
+
+## Getting Started
+
+- Install all dependencies (using the `npm install` command).
+- Run the development web server using the `node express_server.js` command.
 
 #### Dependencies
 
