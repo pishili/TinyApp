@@ -4,11 +4,11 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-[1] The user can login, verify her email using header. Add, edit or delete the long urls imorted for outputting short urls.
+[Screenshot of URLs page] The user can login, verify her email using header. Add, edit or delete the long urls imorted for outputting short urls.
 
 ![](/imgs/img1.png)
 
-[2] The Edit funtionality allow the user to modify their inserted long urls.
+[Screenshot of edit page] The Edit funtionality allow the user to modify their inserted long urls.
 
 ![](/imgs/img2.png)
 
