@@ -41,11 +41,11 @@ function checkEmailAndPasswordInUsers(users, email, password) {
     return undefined;
 }
 
-function getUserByEmail(email, database) {
+function getUserByEmail(email, users) {
     // lookup magic...
-    for (let userID in database) {
-        if (user[userID].email === email) {
-            return user;
+    for (let userID in users) {
+        if (users[userID].email === email) {
+            return users[userID];
         }
     }
 };
@@ -53,4 +53,5 @@ function getUserByEmail(email, database) {
 
 module.exports = { generate,
                    checkEmailAndPasswordInUsers,
-                   checkEmailInUsers};
+                   checkEmailInUsers,
+                   getUserByEmail };
