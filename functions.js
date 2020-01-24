@@ -1,3 +1,6 @@
+const bcrypt = require('bcrypt');
+
+
 function generate_random_string(string_length){
     let random_string = '';
     let random_ascii;
@@ -20,35 +23,34 @@ function generate() {
     return generate_random_string(6) + generate_random_number()
 }
 
-function checkEmailInUsers(users, email, passwrord) {
+function checkEmailInUsers(users, email,) {
     for (let userID in users) {
         if (users[userID].email === email) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function checkEmailAndPasswordInUsers(users, email, password) {
-    for (let userID in users) {
-        if (users[userID].email === email && users[userID].password === password) {
             return userID;
         }
     }
     return undefined;
 }
 
-function getUserByEmail(email, database) {
-    // lookup magic...
-    for (let user of database) {
-        if (user[id].email ==== email ) {
-            return user;
+function checkEmailAndPasswordInUsers(users, email, password) {
+    for (let userID in users) {
+        if (users[userID].email === email && users[userID].password === passwrord) {
+            return userID;
         }
     }
-  };
+    return undefined;
+}
+
+// function getUserByEmail(email, database) {
+//     // lookup magic...
+//     for (let user of database) {
+//         if (user[id].email ==== email ) {
+//             return user;
+//         }
+//     }
+//   };
 
 
 module.exports = { generate,
                    checkEmailAndPasswordInUsers,
-                   checkEmailInUsers,
-                   getUserByEmail };
+                   checkEmailInUsers};

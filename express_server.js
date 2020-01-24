@@ -5,7 +5,7 @@
 
 const express = require("express");
 const app = express();
-const PORT = 8080; // default port 8080
+const PORT = process.env.PORT || 8080; // default port 8080
 const { generate } = require('./functions');
 const { checkEmailAndPasswordInUsers } = require('./functions');
 const { checkEmailInUsers } = require('./functions');
@@ -18,6 +18,9 @@ const bcrypt = require('bcrypt');
 // from a buffer into string that we can read.  
 // it will then add the data to the req (request) object
 // under the key body
+//MIDDLEWARES
+// app.use(morgan('dev'));
+app.use(express.static('public'))
 
 const bodyParser = require("body-parser");
 console.log(bodyParser);
@@ -25,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // adding the cookie-parser
 var cookieParser = require('cookie-parser');
-app.use(cookieParser());
+app.use(cookieParser()); 
 
 
 const urlDatabase = {
@@ -67,7 +70,6 @@ app.get("/urls/new", (req, res) => {
     const tempVars = {
       "user": user
     };
-
     res.render("urls_new", tempVars);
   } else {
     res.redirect('/login');
@@ -219,39 +221,22 @@ app.post('/urls/:shortURL', (req, res) => {
 
 // Login
 app.post('/login', (req, res) => {
-
+  // getting the entered email and password
   const email = req.body.email;
-  //ladanks@gmail.com
-  const password = req.body.password;
-  console.log('entered password when user log in: ', password);
-
-  // const hashedRecordedPassword = users[randomId].password;
-  // console.log('randomID is: ', randomId);
-  // console.log('users object is', users[randomId]);
-
-  // bcrypt.compareSync(password, hashedRecordedPassword); // compare the entered password with hashed
-  
-  const user_id = checkEmailAndPasswordInUsers(users, email, password);
-  
-  console.log(checkEmailAndPasswordInUsers(users, email, password));
-  // console.log('user_id is ', user_id);
-
-  // const registeredHashedPasswrod = users[user_id].password;
-  // console.log('hashed pass is  ', registeredHashedPasswrod);
-  // console.log('registered hashed password: ', registeredHashedPasswrod);
-
-  // const passportCondition = bcrypt.compareSync(enteredPassword, registeredHashedPasswrod);
-  // if (passportCondition) {
-  //   return 'yay';
-  // }
-  // sample1@yahoo.com
-
-  // console.log(user_id)
-  if (user_id) {
-    res.cookie('user_id', user_id);
-    res.redirect('/urls');
-  } else {
+  const enteredPassword = req.body.password;
+  const user_id = checkEmailInUsers(users, email);
+  if (!user_id) {
+    console.log('user id does not exist');
     res.redirect('/login');
+  } else {
+    const hashPassword = users[user_id].password;
+    if (bcrypt.compareSync(enteredPassword, hashPassword)) {
+      res.cookie('user_id', user_id);
+      res.redirect('/urls');
+    } else {
+      console.log('pass not match');
+      res.redirect('/login');
+    }
   }
 });
 
@@ -303,18 +288,15 @@ app.post('/register', (req, res) => {
   // add a new user object to the global users object
   const randomID = generate();
   const email = req.body.email;
-  // console.log('email is', email);
   const password = req.body.password;
   const hashPassword =  bcrypt.hashSync(password, 10);
-  // the password is hashed now. 
-  // console.log(hashPassword);
-
 
   if (email === '' || password === '') {
     res.status(400).send('The email or password is empty string');
   } else if (checkEmailInUsers(users, email)) {
     res.status(400).send('You are already registered');
   } else {
+    if (!checkEmailInUsers(users, email));
     // add new user
     users[randomID] = {
       "id": randomID,
@@ -323,11 +305,7 @@ app.post('/register', (req, res) => {
     }
     // add cookie using user-id
     res.cookie('user_id', randomID);
-    console.log(users);
-
-    console.log(users[randomID].email);
-    console.log(users[randomID].password);
-    console.log(checkEmailInUsers(users, email));
+    // after registring redirect to /urls
     res.redirect('/urls');
   }
 })
