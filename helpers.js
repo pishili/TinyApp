@@ -41,14 +41,14 @@ function checkEmailAndPasswordInUsers(users, email, password) {
     return undefined;
 }
 
-// function getUserByEmail(email, database) {
-//     // lookup magic...
-//     for (let user of database) {
-//         if (user[id].email ==== email ) {
-//             return user;
-//         }
-//     }
-//   };
+function getUserByEmail(email, database) {
+    // lookup magic...
+    for (let userID in database) {
+        if (user[userID].email === email) {
+            return user;
+        }
+    }
+};
 
 
 module.exports = { generate,

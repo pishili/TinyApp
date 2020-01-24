@@ -6,11 +6,21 @@
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
-const { generate } = require('./functions');
-const { checkEmailAndPasswordInUsers } = require('./functions');
-const { checkEmailInUsers } = require('./functions');
+const { generate } = require('./helpers');
+const { checkEmailAndPasswordInUsers } = require('./helpers');
+const { checkEmailInUsers } = require('./helpers');
 const bcrypt = require('bcrypt');
 
+
+//cookie-session
+var cookieSession = require('cookie-session')
+app.use(cookieSession({
+  name: 'session',
+  keys: ['/*gjugjugjuju secret keys */'],
+
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}))
 // app.use(morgan('dev'));
 // app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -64,7 +74,8 @@ app.set("view engine", "ejs");
 // Gets
 
 app.get("/urls/new", (req, res) => {
-  const user_id = req.cookies.user_id;
+  const user_id = req.session.user_id;
+  // const user_id = req.cookies.user_id;
   const user = users[user_id];
   if (user) {
     const tempVars = {
@@ -90,7 +101,8 @@ app.get("/urls/:id", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {  // how this route handler will look like
-  const user_id = req.cookies.user_id;
+  // const user_id = req.cookies.user_id;
+  const user_id = req.session.user_id;
   const user = users[user_id];
   if (user) {
     // let filteredURLs = urlDatabase
@@ -148,7 +160,8 @@ app.get("/", (req, res) => {
 // adding get operation for cookie
 app.get('/cookie', (req, res) => {
   // Cookies that have not been signed
-  console.log('Cookies: ', req.cookies)
+  // console.log('Cookies: ', req.cookies)
+  console.log('Cookies: ', req.session);
 
   // Cookies that have been signed
   console.log('Signed Cookies: ', req.signedCookies)
@@ -165,7 +178,8 @@ app.get('/u/:shortURL', (req, res) => {
 
 // Register
 app.get('/register', (req, res) => {
-  const user_id = req.cookies.user_id;
+  // const user_id = req.cookies.user_id;
+  const user_id = req.session.user_id;
   const user = users[user_id];
   const password = req.params.password;
   console.log(password);
@@ -179,7 +193,8 @@ app.get('/register', (req, res) => {
 
 // Login
 app.get('/login', (req, res) => {
-  const user_id = req.cookies.user_id;
+  // const user_id = req.cookies.user_id;
+  const user_id = req.session.user_id;
   const user = users[user_id];
   const temptVars = {
     "user": user
@@ -193,7 +208,7 @@ app.post("/urls", (req, res) => {
   console.log('Entering post urls');
   const randomString = generate();
   let shortURL = randomString;
-  urlDatabase[shortURL] = {longURL: req.body.longURL, userID: req.cookies.user_id };
+  urlDatabase[shortURL] = {longURL: req.body.longURL, userID: req.session.user_id };
   res.redirect('/urls')
 })
 
@@ -231,7 +246,8 @@ app.post('/login', (req, res) => {
   } else {
     const hashPassword = users[user_id].password;
     if (bcrypt.compareSync(enteredPassword, hashPassword)) {
-      res.cookie('user_id', user_id);
+      // res.cookie('user_id', user_id);
+      req.session.user_id = user_id;
       res.redirect('/urls');
     } else {
       console.log('pass not match');
@@ -243,11 +259,12 @@ app.post('/login', (req, res) => {
 // Logout
 app.post('/logout', (req, res) => {
   // clear the username cookie
-  console.log('The logout username is', req.cookies.username);
+  console.log('The logout username is', req.session.username);
   // res.cookie('username', null);
-  res.clearCookie('user_id');
+  // res.clearCookie('user_id');
+  //check again
+  req.session = null;
 
-  console.log('The logout username should be null ', req.cookies.username);
   // redirect the user back to the /urls page
   res.redirect('/login');
 })
@@ -256,7 +273,7 @@ app.post('/logout', (req, res) => {
 
 app.get('/urls/:shortURL/edit', (req, res) => {
   // replace with the new syntax
-  const user_id = req.cookies.user_id;
+  const user_id = req.session.user_id;
   // const user_id = req.session.user_id;
   const user = users[user_id];
   const shortURL = req.params.shortURL;
@@ -304,7 +321,8 @@ app.post('/register', (req, res) => {
       "password": hashPassword
     }
     // add cookie using user-id
-    res.cookie('user_id', randomID);
+    // res.cookie('user_id', randomID);
+    req.session.user_id = randomID;
     // after registring redirect to /urls
     res.redirect('/urls');
   }
