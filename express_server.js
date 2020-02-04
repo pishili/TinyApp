@@ -119,17 +119,17 @@ app.get("/", (req, res) => {
 });
 
 app.get('/cookie', (req, res) => {
-  console.log('Cookies: ', req.session);
-  console.log('Signed Cookies: ', req.signedCookies)
+  // console.log('Cookies: ', req.session);
+  // console.log('Signed Cookies: ', req.signedCookies)
 })
 
 app.get('/u/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
-  console.log(shortURL);
+  // console.log(shortURL);
   // the urlDatabase[shortURL] is returning a dictionary
   // one of the keys is longURL
   const longURL = urlDatabase[shortURL].longURL;
-  console.log(longURL);
+  // console.log(longURL);
   res.redirect(longURL);
 
 })
@@ -192,7 +192,7 @@ app.post('/login', (req, res) => {
   const enteredPassword = req.body.password;
   const user_id = checkEmailInUsers(users, email);
   if (!user_id) {
-    console.log('user id does not exist');
+    // console.log('user id does not exist');
     res.redirect('/login');
   } else {
     const hashPassword = users[user_id].password;
@@ -200,7 +200,7 @@ app.post('/login', (req, res) => {
       req.session.user_id = user_id;
       res.redirect('/urls');
     } else {
-      console.log('pass not match');
+      // console.log('pass not match');
       res.redirect('/login');
     }
   }
@@ -253,7 +253,7 @@ app.post('/register', (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
+  // console.log(`Example app listening on port ${PORT}!`);
 });
 
 
