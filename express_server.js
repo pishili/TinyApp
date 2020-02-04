@@ -168,8 +168,15 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 
 app.post('/urls/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
-  urlDatabase[shortURL].longURL = req.body.longURL
-  res.redirect('/urls');
+  const createrOfURL = urlDatabase[shortURL].userID;
+  const user_id = req.session.user_id;
+  const user = users[user_id];
+  if (user !== undefined && user.id === createrOfURL) {
+    urlDatabase[shortURL].longURL = req.body.longURL
+    res.redirect('/urls');
+  } else {
+    res.redirect('/login');
+  }
 })
 
 app.post('/login', (req, res) => {
@@ -197,15 +204,22 @@ app.post('/logout', (req, res) => {
 })
 
 app.get('/urls/:shortURL/edit', (req, res) => {
+  // "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "aJ48lW" },
+  const shortURL = req.params.shortURL;
+  const createrOfURL = urlDatabase[shortURL].userID;
   const user_id = req.session.user_id;
   const user = users[user_id];
-  const shortURL = req.params.shortURL;
-  let templateVars = {
+  if (user !== undefined && user.id === createrOfURL) {
+    let templateVars = {
     'shortURL': shortURL,
     'longURL': urlDatabase[shortURL] && urlDatabase[shortURL].longURL,
     'user': user
   };
   res.render("urls_show", templateVars);
+  }
+  else {
+    res.redirect('/login');
+  }
 })
 
 app.post('/register', (req, res) => {
