@@ -23,7 +23,7 @@ const bodyParser = require("body-parser");
 console.log(bodyParser);
 app.use(bodyParser.urlencoded({ extended: true }));
 var cookieParser = require('cookie-parser');
-app.use(cookieParser()); 
+app.use(cookieParser());
 
 
 const urlDatabase = {
@@ -131,7 +131,7 @@ app.get('/u/:shortURL', (req, res) => {
   const longURL = urlDatabase[shortURL].longURL;
   console.log(longURL);
   res.redirect(longURL);
-  
+
 })
 
 app.get('/register', (req, res) => {
@@ -157,13 +157,21 @@ app.get('/login', (req, res) => {
 app.post("/urls", (req, res) => {
   const randomString = generate();
   let shortURL = randomString;
-  urlDatabase[shortURL] = {longURL: req.body.longURL, userID: req.session.user_id };
+  urlDatabase[shortURL] = { longURL: req.body.longURL, userID: req.session.user_id };
   res.redirect('/urls')
 })
 
 app.post('/urls/:shortURL/delete', (req, res) => {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect("/urls");
+  const shortURL = req.params.shortURL;
+  const createrOfURL = urlDatabase[shortURL].userID;
+  const user_id = req.session.user_id;
+  const user = users[user_id];
+  if (user !== undefined && user.id === createrOfURL) {
+    delete urlDatabase[req.params.shortURL];
+    res.redirect("/urls");
+  } else {
+    res.redirect("/login");
+  }
 })
 
 app.post('/urls/:shortURL', (req, res) => {
@@ -211,11 +219,11 @@ app.get('/urls/:shortURL/edit', (req, res) => {
   const user = users[user_id];
   if (user !== undefined && user.id === createrOfURL) {
     let templateVars = {
-    'shortURL': shortURL,
-    'longURL': urlDatabase[shortURL] && urlDatabase[shortURL].longURL,
-    'user': user
-  };
-  res.render("urls_show", templateVars);
+      'shortURL': shortURL,
+      'longURL': urlDatabase[shortURL] && urlDatabase[shortURL].longURL,
+      'user': user
+    };
+    res.render("urls_show", templateVars);
   }
   else {
     res.redirect('/login');
@@ -226,7 +234,7 @@ app.post('/register', (req, res) => {
   const randomID = generate();
   const email = req.body.email;
   const password = req.body.password;
-  const hashPassword =  bcrypt.hashSync(password, 10);
+  const hashPassword = bcrypt.hashSync(password, 10);
 
   if (email === '' || password === '') {
     res.status(400).send('The email or password is empty string');
