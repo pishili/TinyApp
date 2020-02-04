@@ -125,8 +125,13 @@ app.get('/cookie', (req, res) => {
 
 app.get('/u/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
-  const longURL = urlDatabase[shortURL];
+  console.log(shortURL);
+  // the urlDatabase[shortURL] is returning a dictionary
+  // one of the keys is longURL
+  const longURL = urlDatabase[shortURL].longURL;
+  console.log(longURL);
   res.redirect(longURL);
+  
 })
 
 app.get('/register', (req, res) => {
